@@ -9,14 +9,38 @@
     <link rel="stylesheet" type="text/css" href="style.css">
     <!-- Load the Paper.js library -->
     <script type="text/javascript" src="paper-full.js"></script>
+    <script type="text/javascript" src="howler.js"></script>
     <!-- Define inlined PaperScript associate it with myCanvas -->
     <script type="text/paperscript" canvas="myCanvas">
+        var keyData = {
+            a : {
+                color: "purple",
+                sound:  new Howl({
+                    src: ['sounds/bubbles.mp3']
+                  })
+            },
+            s : {
+                color: "orange",
+                sound:  new Howl({
+                    src: ['sounds/clay.mp3']
+                  })
+            },
+            d : {
+                color: "blue",
+                sound:  new Howl({
+                    src: ['sounds/confetti.mp3']
+                  })
+            }
+        }
         var circles = [];
         function onKeyDown(event) {
-            // When a key is pressed, set the content of the text item:
-            var circle = new Path.Circle(new Point(view.size.width, view.size.height) * Point.random(), new Size(500) * Size.random());
-            circle.fillColor = "red";
-            circles.push(circle);
+            if (keyData[event.key]) {
+                // When a key is pressed, set the content of the text item:
+                var circle = new Path.Circle(new Point(view.size.width, view.size.height) * Point.random(), new Size(500) * Size.random());
+                circle.fillColor = keyData[event.key].color;
+                keyData[event.key].sound.play();
+                circles.push(circle);
+            }
         }
         function onFrame(event) {
             for(var i = 0; i < circles.length; i++) {
